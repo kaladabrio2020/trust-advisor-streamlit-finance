@@ -9,6 +9,9 @@ import pkg_resources
 from src.functions.exist_stocks_crypto_index import verify_symbol
 from src.functions.save_data                 import save_data
 
+## Plots
+from src.your_portfolium.plot.plot_pie_type import plot_pie_type
+
 
 ## options
 OPTIONS = ['Crypto', 'Stocks', 'ETF']
@@ -71,7 +74,7 @@ def your_portfolium():
 
     tab1, tab2 = st.tabs(["Graph", "Data"])
 
-    with tab1: st.write('Graph')
+    with tab1: graph()
     with tab2: get_data_tabs()
 
 ##
@@ -103,3 +106,10 @@ def get_data_tabs():
 
     except Exception as e:
         st.error(e.args[0])
+
+def graph():
+    data = pd.read_csv(DATA_DIR / 'data' / 'your_portfolium.csv')
+
+    left_column, right_column = st.columns([0.35, 0.65], border=True)
+    left_column.plotly_chart(plot_pie_type(data), use_container_width=False)
+    right_column.write('dasdasda')
