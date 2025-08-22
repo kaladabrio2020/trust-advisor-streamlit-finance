@@ -17,6 +17,7 @@ from src.your_portfolium.plot.plot_pie_type import plot_pie_type
 OPTIONS = ['Crypto', 'Stocks', 'ETF']
 STOCKS = investpy.stocks.get_stocks(country="united states")['symbol'].unique().tolist()
 ETF    = investpy.etfs.get_etfs(country="united states")['symbol'].unique().tolist()
+CRYPTO = ['BTC-USD', 'ETH-USD', 'ADA-USD', 'XRP-USD', 'DOGE-USD', 'DOT-USD', 'SOL-USD', 'UNI-USD', 'LUNA-USD', 'LINK-USD']
 
 DATA_DIR = pathlib.Path(__file__).parent.parent.parent
 
@@ -38,6 +39,8 @@ def your_portfolium():
             options_ = STOCKS
         case 'ETF':
             options_ = ETF
+        case 'Crypto':
+            options_ = CRYPTO
         
 
 
@@ -84,7 +87,8 @@ def verification(type_portfolium, code_portfolium):
         return verify_symbol(code_portfolium)
     elif type_portfolium == 'ETF':
         return True
-    
+    elif type_portfolium == 'Crypto':
+        return verify_symbol(code_portfolium)
     return False
 
 ##
@@ -107,6 +111,7 @@ def get_data_tabs():
     except Exception as e:
         st.error(e.args[0])
 
+@st.fragment
 def graph():
     data = pd.read_csv(DATA_DIR / 'data' / 'your_portfolium.csv')
 
