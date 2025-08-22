@@ -4,19 +4,18 @@ import datetime
 import investpy
 import pandas as pd
 import streamlit as st 
-
+import pkg_resources
 ## Functions 
 from src.functions.exist_stocks_crypto_index import verify_symbol
 from src.functions.save_data                 import save_data
 
 
 ## options
-OPTIONS = ['Crypto', 'Stocks', 'Bonds']
-stocks_symbol = investpy.stocks.get_stocks(country="united states")['symbol'].unique().tolist()
+OPTIONS = ['Crypto', 'Stocks', 'ETF']
+STOCKS = investpy.stocks.get_stocks(country="united states")['symbol'].unique().tolist()
+ETF    = investpy.etfs.get_etfs(country="united states")['symbol'].unique().tolist()
 
-
-# Index Stocks Symbols
-STOCKS = stocks_symbol
+DATA_DIR = pathlib.Path(__file__).parent.parent.parent
 
 def your_portfolium():
     st.set_page_config(layout="wide", page_title="Your Portfolium", page_icon="📊")
@@ -34,42 +33,73 @@ def your_portfolium():
     match type_portfolium:
         case 'Stocks':
             options_ = STOCKS
+        case 'ETF':
+            options_ = ETF
         
 
 
     code_portfolium = st.sidebar.multiselect(
-        label    = 'Code',
+        label    = 'Symbol/Name',
         max_selections=1,
         accept_new_options=True,
         placeholder='SYMBOL: BTC-USD, ^GSPC, ^VIX..',
-        options = 
+        options = options_
     )
+    code_portfolium = code_portfolium[0] if len(code_portfolium) > 0 else 'doopiwmdampodajsreouibnadsi9384024908230/**/'
     ## value
     value_ = st.sidebar.text_input( label = 'Value', placeholder = 'Value of your portfolium' )
 
     ## Date
     date_ = st.sidebar.date_input( label = 'Date USD', value = datetime.date.today() )
-
-
     ## Submit 
     buttom = st.sidebar.button( label = 'Submit' )
-
     if buttom:
-        os.makedirs(data_dir, exist_ok=True)
-        data_dir = pathlib.Path(__file__).parent.parent.parent
+        os.makedirs(DATA_DIR / 'data', exist_ok=True)
         
         try:
             # Verify data 
-            if not value_.isnumeric():                     raise ValueError('Value must be a number')
-            if len(code_portfolium) <= 1:                  raise ValueError('Code must be at least 2 characters')
-            if not verify_symbol(code_portfolium.upper()): raise ValueError('Code does not exist')
-
+            if len(code_portfolium) < 1:                           raise ValueError('Code must be at least 2 characters')
+            if not verification(type_portfolium, code_portfolium): raise ValueError('Code does not exist')
+            
             # Save data on csv      
-            save_data(data_dir / 'data' / 'your_portfolium.csv', [date_, type_portfolium, code_portfolium.upper(), float(value_)])
+            save_data(DATA_DIR / 'data' / 'your_portfolium.csv', [date_, type_portfolium, code_portfolium.upper(), float(value_)])
             st.success('Data saved')
 
         except ValueError as e: st.error(e.args[0])
+        except Exception  as e: st.error(e.args[0])
         
-        except: st.error('Value must be a number')
-        
-        # If the directory does not exist, create it
+
+    tab1, tab2 = st.tabs(["Graph", "Data"])
+
+    with tab1: st.write('Graph')
+    with tab2: get_data_tabs()
+
+##
+def verification(type_portfolium, code_portfolium):
+
+    if type_portfolium == 'Stocks':
+        return verify_symbol(code_portfolium)
+    elif type_portfolium == 'ETF':
+        return True
+    
+    return False
+
+##
+@st.fragment
+def get_data_tabs():
+    try:
+        st.dataframe(pd.read_csv(DATA_DIR / 'data' / 'your_portfolium.csv'))
+
+        id_remove = st.text_input('Remove data by id')
+        try:
+            if len(id_remove) > 6:
+                df = pd.read_csv(DATA_DIR / 'data' / 'your_portfolium.csv')
+                df = df[df['id'] != id_remove]
+                df.to_csv(DATA_DIR / 'data' / 'your_portfolium.csv', index=False)
+
+
+        except Exception as e:
+            st.error(e.args[0])
+
+    except Exception as e:
+        st.error(e.args[0])
