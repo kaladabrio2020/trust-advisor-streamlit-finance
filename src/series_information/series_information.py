@@ -6,6 +6,7 @@ import os
 from src.series_information.plot.candticks  import plot_chat_candlestick
 from src.series_information.plot.volatility import plot_volatility
 from src.series_information.plot.return_rate import plot_return_rate
+from src.series_information.plot.decomposition import decompose_time_series
 
 from src.functions.gets_data import get_data
 
@@ -47,6 +48,23 @@ def series_information():
 
     window = st.sidebar.slider('Return Rate', 0, 30, 0)
     
+    st.sidebar.subheader("Decomposition Settings")
+
+    type_decomposition = st.sidebar.selectbox(
+        label = 'Type of Decomposition',
+        options = ['additive', 'multiplicative'],
+        index = 0,
+        help = 'Additive: y(t) = T(t) + S(t) + e(t) | Multiplicative: y(t) = T(t) * S(t) * e(t)'
+    )
+
+    freq = st.sidebar.number_input(
+        label = 'Frequency (Seasonal Period)',
+        min_value = 2,
+        max_value = 365,
+        value = 5,
+        step = 1,
+        help = 'Number of periods in a season. Ex: 5 for weekly seasonality in daily data'
+    )
     # Get data 
     try:
         symbol_, segment_date_, window_ = (
@@ -57,12 +75,12 @@ def series_information():
         
         if len(symbol) != 0 and len(segment_date) != 0:
             data = get_data(symbol_, segment_date_)
-            graph_series_information(data, symbol_, segment_date_, window_)
+            graph_series_information(data, symbol_, segment_date_, window_, type_decomposition, freq)
         
     except Exception as e:
         st.error(str(e))
 
-def graph_series_information(data, symbol, segment_date, window):
+def graph_series_information(data, symbol, segment_date, window, type_decomposition, freq):
     with st.container(border=True):
 
         fig1 = plot_chat_candlestick(data, symbol)
@@ -79,3 +97,11 @@ def graph_series_information(data, symbol, segment_date, window):
     with col2:
         fig3 = plot_return_rate(data, window=window)
         st.plotly_chart(fig3, use_container_width=True)
+    
+    with st.container(border=True):
+        try:
+            fig4 = decompose_time_series(data, model=type_decomposition, freq=freq)
+            st.plotly_chart(fig4, use_container_width=True)
+        except Exception as e:
+            st.error(str(e))
+
