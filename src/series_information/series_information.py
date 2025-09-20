@@ -6,9 +6,18 @@ import os
 from src.series_information.plot.candticks  import plot_chat_candlestick
 from src.series_information.plot.volatility import plot_volatility
 from src.series_information.plot.return_rate import plot_return_rate
-from src.series_information.plot.decomposition import decompose_time_series
+from src.series_information.plot.decomposition      import decompose_time_series
+
+# 
+from src.series_information.plot.heatmap_pct_montly     import plot_pct_change_data_monthly
+from src.series_information.plot.pos_neg_pct_change_bar import plot_pos_neg_pct_change
+from src.series_information.plot.pos_neg_pct_change_pie import plot_pie_pos_neg_pct_change
+
+
 
 from src.functions.gets_data import get_data
+from src.functions.trat_pct_moth import pct_change_data_monthly
+from src.functions.trat_pct_moth_pos_neg import return_pos_neg_pct_change
 
 
 DATA_DIR = pathlib.Path(os.getcwd())
@@ -81,13 +90,15 @@ def series_information():
         st.error(str(e))
 
 def graph_series_information(data, symbol, segment_date, window, type_decomposition, freq):
-    with st.container(border=True):
 
+
+    # Candlestick Chart
+    with st.container(border=True):
         fig1 = plot_chat_candlestick(data, symbol)
         st.plotly_chart(fig1, use_container_width=True)
 
 
-    ## GRAPH 1 e 2
+    ## GRAPH 1 e 2 = Volatility and Return Rate
     col1, col2 = st.columns([0.50, 0.50], border=True)
 
     with col1:
@@ -98,10 +109,37 @@ def graph_series_information(data, symbol, segment_date, window, type_decomposit
         fig3 = plot_return_rate(data, window=window)
         st.plotly_chart(fig3, use_container_width=True)
     
+
+    # Decomposition Series and Pct Change cat by month (with pie and bar)
+    col3, col4 = st.columns([0.60, 0.40])
+    with col3:
+        fig4 = decompose_time_series(data, type_decomposition, freq)
+
+        with st.container(border=True):
+            st.plotly_chart(fig4, use_container_width=True)
+    
+    with col4:
+        try:
+            subset    = return_pos_neg_pct_change(pct_change_data_monthly(data)[1])
+
+            fig6 = plot_pos_neg_pct_change(subset)
+            fig7 = plot_pie_pos_neg_pct_change(subset)
+
+            with st.container(border=True):
+                st.plotly_chart(fig6, use_container_width=True)
+
+            with st.container(border=True):
+                st.plotly_chart(fig7, use_container_width=True)
+
+        except Exception as e:
+            st.error(str(e))
+
+    # Pct Change for each month
     with st.container(border=True):
         try:
-            fig4 = decompose_time_series(data, model=type_decomposition, freq=freq)
-            st.plotly_chart(fig4, use_container_width=True)
+            subset, _ = pct_change_data_monthly(data)
+            fig5 = plot_pct_change_data_monthly(subset)
+            st.plotly_chart(fig5, use_container_width=True)
         except Exception as e:
             st.error(str(e))
 

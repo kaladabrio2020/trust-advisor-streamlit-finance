@@ -62,6 +62,7 @@ def plot_return_rate(data, window=0):
             family = FONT_FAMILY,
         ),
         template = 'simple_white',
-        hovermode = 'x'
+        hovermode = 'x',
+        height = 350
     )
     return fig

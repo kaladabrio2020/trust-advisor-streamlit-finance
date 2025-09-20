@@ -69,6 +69,7 @@ def decompose_time_series(data, model='additive', freq=None):
             family = FONT_FAMILY
         ),
         template = 'simple_white',
-        dragmode=None
+        dragmode=None,
+        height=700
     )
     return fig

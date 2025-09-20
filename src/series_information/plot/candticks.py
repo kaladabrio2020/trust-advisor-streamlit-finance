@@ -52,7 +52,8 @@ def plot_chat_candlestick(data, symbol='BTC-USD', scale=None):
         ),
         template = 'simple_white',
         hovermode = 'x unified',
-        xaxis_rangeslider_visible=False
+        xaxis_rangeslider_visible=False,
+        height = 300
 
     )
     return fig

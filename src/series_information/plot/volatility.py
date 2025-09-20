@@ -39,6 +39,7 @@ def plot_volatility(data):
         font = dict(
             family = FONT_FAMILY,
         ),
-        template = 'simple_white'
+        template = 'simple_white',
+        height = 350
     )
     return fig
