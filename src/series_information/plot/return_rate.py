@@ -8,7 +8,7 @@ FONT_FAMILY = 'ui-sans-serif,-apple-system,system-ui,Segoe UI,Helvetica,Apple Co
 def plot_return_rate(data, window=0):
 
     if window == 0:
-        data['return_rate'] = data['Close'] - data['Open']
+        data['return_rate'] = (data['Close'] - data['Open']/data['Open'])
     else:
         data['return_rate'] = data['Close'].pct_change(window)
         data = data.dropna()
@@ -17,7 +17,8 @@ def plot_return_rate(data, window=0):
         go.Scatter(
             x=data.index, 
             y=data['return_rate'], 
-            mode='lines'
+            mode='lines',
+            customdata=data.index.strftime('%Y-%m-%d')
         )
     ])
 
@@ -28,7 +29,7 @@ def plot_return_rate(data, window=0):
                 size = 16
             )
         ),
-        hovertemplate = '%{x} <br> Return Rate : %{y}<extra></extra>'
+        hovertemplate = '%{customdata} <br> Return Rate : %{y}<extra></extra>'
     )
     
     title_text = 'Return Rate, the last '+ str(window) + ' days'

@@ -1,0 +1,38 @@
+Retorno Percentual Diário / Mensal / Anual
+Mede a variação percentual do preço de um ativo em diferentes períodos de tempo. É calculado como (Preço Final - Preço Inicial) / Preço Inicial × 100. Esta métrica permite comparar a performance de diferentes ativos e períodos, sendo fundamental para análise de rentabilidade.
+
+Retorno Logarítmico
+Utiliza o logaritmo natural da razão entre preços consecutivos: ln(Pt/Pt-1). É mais adequado para séries longas pois possui propriedades matemáticas superiores: é aditivo ao longo do tempo, simétrico (retornos positivos e negativos têm mesma magnitude), e melhor para modelagem estatística e cálculos de volatilidade.
+
+Retorno Acumulado
+Representa o crescimento total do capital investido ao longo de um período, considerando a capitalização composta dos retornos. Mostra quanto teria crescido um investimento inicial, sendo útil para avaliar a performance total de uma estratégia ou ativo ao longo do tempo.
+
+Volatilidade Histórica
+Medida através do desvio padrão dos retornos passados, quantifica o nível de incerteza ou risco de um ativo. Volatilidade alta indica maior variabilidade nos preços, enquanto volatilidade baixa sugere movimentos mais estáveis. Geralmente anualizada para padronização.
+
+Volatilidade Implícita
+Derivada dos preços das opções (como no Deribit para Bitcoin), representa a expectativa do mercado sobre a volatilidade futura do ativo. Diferente da volatilidade histórica, é prospectiva e reflete o sentimento e expectativas dos traders sobre incertezas futuras.
+
+Drawdown Máximo
+Representa a maior perda percentual a partir de um pico histórico até o vale subsequente, antes de uma nova alta. É uma métrica crucial de risco que mostra o pior cenário que um investidor enfrentaria, ajudando a avaliar a tolerância necessária para manter uma posição.
+
+Sharpe Ratio
+Mede o retorno ajustado ao risco, calculado como (Retorno do Ativo - Taxa Livre de Risco) / Volatilidade. Valores mais altos indicam melhor relação risco-retorno. Um Sharpe acima de 1 é considerado bom, acima de 2 é muito bom, permitindo comparar diferentes investimentos em base ajustada ao risco.
+
+Sortino Ratio
+Variação do Sharpe Ratio que considera apenas a volatilidade negativa (downside deviation) no denominador, ignorando a volatilidade positiva. É mais apropriado pois penaliza apenas as variações indesejadas (quedas), sendo especialmente útil para estratégias com retornos assimétricos.
+
+Beta
+Mede a sensibilidade de um ativo em relação a um benchmark (como SP500, Nasdaq, Ouro). Beta = 1 indica movimento similar ao benchmark, Beta > 1 indica maior sensibilidade (mais volátil), Beta < 1 indica menor sensibilidade. Beta negativo indica movimento contrário ao benchmark.
+
+Correlação com Outros Ativos
+Mede a relação linear entre os movimentos de preços de diferentes ativos, variando de -1 (correlação negativa perfeita) a +1 (correlação positiva perfeita). Fundamental para diversificação de portfólio, pois ativos com baixa correlação reduzem o risco total da carteira.
+
+Autocorrelação dos Retornos
+Mede se há padrão de dependência entre retornos de períodos consecutivos, indicando se existe "memória" nos movimentos de preços. Autocorrelação significativa pode sugerir oportunidades de momentum ou reversão, contrariando a hipótese de mercado eficiente.
+
+Skewness e Kurtosis
+Skewness mede a assimetria da distribuição dos retornos. Valores positivos indicam cauda longa à direita (mais quedas pequenas e poucas altas grandes), valores negativos indicam o contrário. Kurtosis mede a espessura das caudas da distribuição, indicando a probabilidade de eventos extremos comparado a uma distribuição normal.
+
+Sazonalidade
+Identifica padrões recorrentes em determinados períodos (dias da semana, meses do ano, horários específicos). No mercado cripto, pode incluir efeito fim de semana, padrões mensais ou trimestrais. Útil para timing de entrada/saída e compreensão de dinâmicas específicas do mercado.

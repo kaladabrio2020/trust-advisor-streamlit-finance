@@ -7,17 +7,22 @@ FONT_FAMILY = 'ui-sans-serif,-apple-system,system-ui,Segoe UI,Helvetica,Apple Co
 def plot_volatility(data):
     # daily Volatility : Close - Open
     
-    data['volatility'] = data['High'] - data['Low']
- 
+    subset = data['Close'].pct_change().resample('ME').std() * np.sqrt(252)
+    
     fig = go.Figure([
         go.Scatter(
-            x=data.index, 
-            y=data['volatility'], 
-            mode='lines'
+            x=subset.index, 
+            y=subset.values.flatten(), 
+            mode='lines',
+            customdata=subset.index.strftime('%Y-%m-%d')
         )
     ])
 
-    title_text = 'Daily Volatility'
+    title_text = 'Monthly Volatility'
+
+    fig.update_traces(
+        hovertemplate = '%{customdata} <br> Volatility : %{y}<extra></extra>'
+    )
     fig.update_layout(
         title = dict(
             text = title_text,

@@ -5,13 +5,15 @@ from src.your_portfolium.your_portfolium       import your_portfolium
 from src.series_information.series_information import series_information
 from src.trust_advisor.trust_advisor           import trust_advisor
 from src.about.about import about
+from src.config.config import config
 # theme
 
 OPTIONS = {
     'about'         : 'About',
     'your_portfolio': 'Your Portfolio',
     'series_information': 'Series Information',
-    'trust_advisor' : 'Trust Advisor'
+    'trust_advisor' : 'Trust Advisor',
+    'config'        : 'Config'
 }
 
 
@@ -33,3 +35,6 @@ match choice:
         series_information()
     case 'Trust Advisor':
         trust_advisor()
+    
+    case 'Config':
+        config()

@@ -8,9 +8,15 @@ import pkg_resources
 ## Functions 
 from src.functions.exist_stocks_crypto_index import verify_symbol
 from src.functions.save_data                 import save_data
+from src.functions.series_profit             import serie_profit
+from src.functions.series_profit             import compute_portfolio_profits
+from src.functions.series_profit             import serie_profit_pct
+
 
 ## Plots
-from src.your_portfolium.plot.plot_pie_type import plot_pie_type
+from src.your_portfolium.plot.plot_pie_type     import plot_pie_type
+from src.your_portfolium.plot.plot_serie_profit import plot_serie_profit
+from src.your_portfolium.plot.plot_area_profit  import plot_area_profit
 
 
 ## options
@@ -114,7 +120,20 @@ def get_data_tabs():
 @st.fragment
 def graph():
     data = pd.read_csv(DATA_DIR / 'data' / 'your_portfolium.csv')
+    
+    subs= compute_portfolio_profits(data)
+    series, serie2 = serie_profit(data, subs)
+    profit_ptc = serie_profit_pct(series, serie2)
 
-    left_column, right_column = st.columns([0.35, 0.65], border=True)
-    left_column.plotly_chart(plot_pie_type(data), use_container_width=False)
-    right_column.write('dasdasda')
+    value_ = series.iloc[-1]
+    ptc_   = profit_ptc.iloc[-1]
+
+
+    left_column, right_column = st.columns([0.50, 0.50], border=True)
+    
+    #left_column.metric(label = 'Value', value = f'{value_:.2f}', delta = f'{ptc_:.2f}%')
+    
+    left_column.plotly_chart(plot_area_profit(profit_ptc),  use_container_width=False)
+    
+    right_column.plotly_chart(plot_serie_profit(series), use_container_width=False)
+
