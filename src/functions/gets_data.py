@@ -1,6 +1,9 @@
 import yfinance 
 import investpy
 import pandas as pd
+import pathlib
+
+BASE_DIR = pathlib.Path(__file__).parent.parent.parent
 
 def get_data_yfinance(symbol: str, period: str) -> pd.DataFrame:
     try:
@@ -30,3 +33,17 @@ def get_data(symbol: str, period: str) -> pd.DataFrame:
         raise Exception(f"Symbol {symbol} not found in any provider")
     
     return data
+
+
+import requests
+import pickle
+def get_data_fred(symbol: str) -> pd.DataFrame:
+    try:
+        with open(BASE_DIR / 'config' / 'api_fred.pkl', 'rb') as f:
+            api = pickle.load(f)
+
+        response = requests.get(f'https://api.stlouisfed.org/fred/series/observations?series_id={symbol}&api_key={api}&file_type=json')
+        data = yfinance.download(symbol, period="1d")
+        return data
+    except Exception as e:
+        st.error(e.args[0])

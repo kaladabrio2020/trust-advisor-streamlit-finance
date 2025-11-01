@@ -17,3 +17,4 @@ def save_data(path, list_):
         data_frame = pd.DataFrame(columns=['id', 'Date', 'Type', 'Symbol', 'Value'])
         data_frame.loc[len(data_frame)] = list_
         data_frame.to_csv(path, index=False)
+

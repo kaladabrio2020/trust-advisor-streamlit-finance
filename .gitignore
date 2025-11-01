@@ -3,6 +3,8 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+id_fred.*
+
 node_modules/
 
 # C extensions

@@ -3,7 +3,7 @@ import pathlib
 import pickle
 import os
 
-BASE_ID = pathlib.Path(__file__).parent.parent
+BASE_ID = pathlib.Path(__file__).parent.parent.parent
 
 
 def save_data(input_id_fred):
@@ -24,16 +24,17 @@ def config():
     ID = None
     # Exist id
     if not os.path.exists(BASE_ID / 'data' / 'id_fred.pkl'):
-        ID = None
+        ID = 'None'
     else:
         ID = open_data()  
 
     # ID Fred
-    input_id_fred = st.text_input(label='ID FRED', value=ID, disabled=True, placeholder='ID FRED', help='ID FRED')
+    input_id_fred = st.text_input(label='ID FRED', value=str(ID))
 
     # Save
 
     button = st.button('Save')
+
 
     if button:
         save_data(input_id_fred)
